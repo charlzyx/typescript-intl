@@ -1,0 +1,24 @@
+diff --git a/node_modules/@formatjs/intl/src/types.d.ts b/node_modules/@formatjs/intl/src/types.d.ts
+index 0ed88f2..7a582ef 100644
+--- a/node_modules/@formatjs/intl/src/types.d.ts
++++ b/node_modules/@formatjs/intl/src/types.d.ts
+@@ -72,10 +72,18 @@ export interface IntlCache {
+     list: Record<string, IntlListFormat>;
+     displayNames: Record<string, DisplayNames>;
+ }
++
++// TIntlKeys
++
++type CheckNever<T> = T extends never ? 'yes' : 'no';
++
++type AnyCheck<T> = CheckNever<T> extends 'no' ? 'no' : 'yes';
++
+ export interface MessageDescriptor {
+-    id?: string | number;
++    id?: AnyCheck<TIntlKeys> extends 'yes' ? (string | number) : TIntlKeys;
+     description?: string | object;
+     defaultMessage?: string | MessageFormatElement[];
+ }
++
+ export declare type OptionalIntlConfig<T = string> = Omit<IntlConfig<T>, keyof typeof DEFAULT_INTL_CONFIG> & Partial<typeof DEFAULT_INTL_CONFIG>;
+ //# sourceMappingURL=types.d.ts.map
