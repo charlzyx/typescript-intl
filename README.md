@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+# React + Typescript 4.1 + react-intl
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 痛点
 
-## Available Scripts
+```tsx
+import { FormattedMessage } from 'react-intl'
+const lang {
+  "app.name": "charlzyx's app",
+  "navbar.lang": "中文"
+} as const;
 
-In the project directory, you can run:
+<FormattedMessage id="app.name" >
+//------------------^------------
+// 一个 const 类型再这里没有类型提示, ts 强迫症就很难受
+```
 
-### `yarn start`
+## 痒点
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```ts
+const lang {
+  // dot 分割天然是 object 访问字符, 那么, 为什么不能
+  "app.name": "charlzyx's app",
+  "navbar.lang": "中文"
+  // 直接写成 JSON 对象呢
+  app: {
+    name: "charlzyx's app",
+  },
+  navbar: {
+    lang: "中文"
+  }
+} as const;
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Solution
+> 痒点, lodash.walk (好像不再export, 当然手写一个也不是很难
 
-### `yarn test`
+- walk 遍历对象, 将叶子节点存储为 [path: string]: string 格式即可, 难度系数 0
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> 痛点
+1. 补丁: 添加类型补丁包, 困难度比较高
+2. 套娃: 通过包装原有组件
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
