@@ -1,5 +1,7 @@
 # React + Typescript 4.1 + react-intl
 
+https://www.bilibili.com/video/BV1Sv4y1Z7KV
+
 ## 痛点
 
 ```tsx
